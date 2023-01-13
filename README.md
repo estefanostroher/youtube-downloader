@@ -1,7 +1,4 @@
 # youtube-downloader
-Download your videos from youtube using Youtube Downloader,
-
-READ ME!
 
 This is a simple file that will guide you on how to use the program, just follow the steps bellow.
 
