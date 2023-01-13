@@ -21,9 +21,6 @@ Things that might happen(it doesn't mean the program is not working):
 2 - By default, the speed of download is unlimited, so do not worry about that;
 
 If you have any problems with the program, please, contact me:
- 
-->
 -> https://github.com/estefanostroher
-->
 
 Youtube Downloader® 2023, made by Estefano Ströher.
