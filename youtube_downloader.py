@@ -1,10 +1,10 @@
-import sys
+import sys, os
 
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QThread
 from PyQt5.QtWidgets import QApplication, QComboBox, QFileDialog, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
-import yt_dlp
+import pytube
 
 class YouTubeDownloader(QWidget):
     def __init__(self):
@@ -56,49 +56,50 @@ class YouTubeDownloader(QWidget):
 
     def selectSaveLocation(self):
         # Usa o QFileDialog para selecionar o local do vídeo a ser salvo.
-        save_location_button = QFileDialog.getSaveFileName(self, 'Save Video', '/', 'MP4 Files (*.mp4)')[0]
+        save_location_button = QFileDialog.getExistingDirectory(self, 'Save Video', '/', QFileDialog.ShowDirsOnly)
         self.save_location_button = save_location_button
 
     def download(self):
-        # Pega a URL do vídeo do QLineEdit
+        # Pega a URL do vídeo do QLineEdit.
         url = self.url_edit.text()
 
-        # Pega a resolução do vídeo selecionada do QComboBox
+        # Pega a resolução do vídeo selecionada do QComboBox.
         resolution = self.resolution_combo.currentText()
 
         # Seta o formato da resolução baseado no que foi selecionado.
         if resolution == '144p':
-            height = 144
+            resolution_video = '144p'
         if resolution == '240p':
-            height = 240
+            resolution_video = '240p'
         if resolution == '360p':
-            height = 360
+            resolution_video = '360p'
         if resolution == '480p':
-            height = 480
+            resolution_video = '480p'
         if resolution == '720p':
-            height = 720
+            resolution_video = '720p'
         elif resolution == '1080p':
-            height = 1080
+            resolution_video = '1080p'
 
-        # Usando opções do youtube-dl
-        ydl_opts = {
-            # Usa o formato especificado pelo usuário com a extensão .mp4
-            'format': f'bestvideo[height={height}][ext=mp4]+bestaudio[ext=mp4a]/best[height={height}][ext=mp4]/',
+        # Usa o Pytube para obter o objeto do vídeo e definir a resolução a ser baixada.
+        video = pytube.YouTube(url)
+        stream = video.streams.filter(res = resolution_video).first()
 
-            # Salva o vídeo no local especificado.
-            'outtmpl': self.save_location_button,
-        }
+        # Usa o QFileDialog para selecionar o diretório onde o vídeo será salvo.
+        directory = QFileDialog.getExistingDirectory(self, 'Save Video', '/', QFileDialog.ShowDirsOnly)
+
+        # Mostra a mensagem "Downloading" quando o vídeo começar a baixar.
+        QMessageBox.information(self, 'Downloading', 'Download foi iniciado!')
 
         # Se caso não for possível baixar o vídeo, uma mensagem de erro aparecerá.
         try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+            # Usa Pytube para baixar o vídeo
+            filename = video.title + ".mp4"
+            file_path = os.path.join(directory, filename)
+            stream.download(output_path = directory, filename = filename)
             QMessageBox.information(self, 'Sucesso', 'Vídeo baixado com sucesso!')
-        except yt_dlp.utils.DownloadError as e:
+        except pytube.exceptions.VideoUnavailable as e:
             QMessageBox.warning(self, 'Erro', 'Erro ao baixar o vídeo!: ' + str(e))
-        except yt_dlp.utils.ContentTooShortError as e:
-            QMessageBox.warning(self, 'Erro', 'Erro ao baixar o vídeo: ' + str(e))
-        except FileNotFoundError as e:
+        except OSError as e:
             QMessageBox.warning(self, 'Erro', 'Erro ao salvar o vídeo!: ' + str(e))
 
 if __name__ == '__main__':
