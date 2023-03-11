@@ -4,13 +4,15 @@ This is a simple file that will guide you on how to use the program, just follow
 
 How to use the Youtube Downloader:
 
-1 - Get the URL from the video you want to download and paste it on the first line;
+1 - Type python3 youtube_downloader.py to run the program on terminal and open it;
 
-2 - The "Salvar Vídeo" button is to save the location of your video, the extension is setted to .mp4 by default;
+2 - Get the URL from the video you want to download and paste it on the first line;
 
-3 - Above the first button, you will choose the resolution you want;
+3 - The "Salvar Vídeo" button is to save the location of your video, the extension is setted to .mp4 by default;
 
-4 - In the end, just click on "Download". :)
+4 - Above the first button, you will choose the resolution you want;
+
+5 - In the end, just click on "Download". :)
 
 Extras:
 
