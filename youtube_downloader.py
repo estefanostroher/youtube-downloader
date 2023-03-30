@@ -48,10 +48,10 @@ class YouTubeDownloader(QWidget):
         self.setWindowTitle('YouTube Downloader')
 
         # Faz com que a interface tenha sempre o mesmo tamanaho de 720x480.
-        self.setGeometry(0, 0, 720, 480)
-        self.setMaximumHeight(480)
+        self.setGeometry(0, 0, 720, 144)
+        self.setMaximumHeight(144)
         self.setMaximumWidth(720)
-        self.setMinimumHeight(480)
+        self.setMinimumHeight(144)
         self.setMinimumWidth(720)
 
     def selectSaveLocation(self):
